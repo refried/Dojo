@@ -13,8 +13,8 @@ public class Test {
         MatrixFactorization mf = new MatrixFactorization();
         mf.run();
         
-        NeighborhoodBased nb = new NeighborhoodBased();
-        nb.run();
+//        NeighborhoodBased2 nb = new NeighborhoodBased2();
+//        nb.run();
         
         //print errors for rmse and mae for both algorithms
         
