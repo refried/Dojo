@@ -33,6 +33,10 @@ public class NeighborhoodBased {
         //initialize user 
         userMeans = new Matrix(numUsers , 1);
         calculateMeans();
+        
+        //intialize predictions
+        predictions = new Matrix(numUsers, numItems);
+        getPredictions();
     }
     
     public void getPredictions(){
@@ -42,14 +46,21 @@ public class NeighborhoodBased {
                 double denom = 0;    
                 for (int k = 0 ; k < numUsers; k++){
                     if (k != i && r.get(k, j) != 0){
-                        sum += (r.get(k, j) - userMeans.get(k, 1))*w.get(i, k);
+                        sum += (r.get(k, j) - userMeans.get(k, 0))*w.get(i, k);
+                        if (Double.isNaN(w.get(i, k))) {
+                            System.out.println("NAN");
+                        }
                         denom += Math.abs(w.get(i,k));
                     }
                 }
+                
+                if (i == 0 && j == 8) {
+                    int stop = 0;
+                }
                 if (denom != 0){
-                    predictions.set(i, j , userMeans.get(i , 1) + sum/denom);
+                    predictions.set(i, j , userMeans.get(i , 0) + sum/denom);
                 } else {
-                    predictions.set(i, j , userMeans.get(i , 1));
+                    predictions.set(i, j , userMeans.get(i , 0));
                 }
             }
         }
@@ -93,7 +104,9 @@ public class NeighborhoodBased {
                         sum += numA * numB;
                     }
                     double ws = sum / (Math.sqrt(denomA) * Math.sqrt(denomB));
-                    w.set(i, j, ws);
+                    //if ws is NaN, it means that all of the ratings lined up
+                    // exactly.  in this case, use 0
+                    w.set(i, j, Double.isNaN(ws) ? 0 : ws);
                 }
             }
         }        
@@ -109,7 +122,7 @@ public class NeighborhoodBased {
                     counter++;
                 }
             }
-            userMeans.set(i,1, sum/counter);
+            userMeans.set(i, 0, sum/counter);
         } 
     }
     
