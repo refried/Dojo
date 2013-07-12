@@ -6,6 +6,7 @@ public class Test {
     }
     
     public static double MAE(){
+        
         return 0;
     }
     
@@ -15,6 +16,7 @@ public class Test {
         
         NeighborhoodBased nb = new NeighborhoodBased();
         nb.run();
+        
         
         //print errors for rmse and mae for both algorithms
         

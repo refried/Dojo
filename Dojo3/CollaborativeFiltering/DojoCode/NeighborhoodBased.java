@@ -13,7 +13,8 @@ public class NeighborhoodBased {
     Matrix r;
     Matrix w; //similarity matrix
     Matrix ruv; // mean of common ratings
-
+    Matrix userMeans; // mean of all ratings per user
+    Matrix predictions;
     public NeighborhoodBased(){
         r = new Matrix(DataParser.parse());
         
@@ -27,11 +28,37 @@ public class NeighborhoodBased {
         ruv = new Matrix(numUsers, numUsers, 0);
         
         // Calculate means
-        calculateMeans();
+        calculateWeights();
         
+        //initialize user 
+        userMeans = new Matrix(numUsers , 1);
+        calculateMeans();
     }
     
-    public void calculateMeans(){        
+    public void getPredictions(){
+        for (int i = 0 ; i < numUsers; i++){
+            for (int j = 0 ; j < numItems ; j++){
+                double sum = 0;
+                double denom = 0;    
+                for (int k = 0 ; k < numUsers; k++){
+                    if (k != i && r.get(k, j) != 0){
+                        sum += (r.get(k, j) - userMeans.get(k, 1))*w.get(i, k);
+                        denom += Math.abs(w.get(i,k));
+                    }
+                }
+                if (denom != 0){
+                    predictions.set(i, j , userMeans.get(i , 1) + sum/denom);
+                } else {
+                    predictions.set(i, j , userMeans.get(i , 1));
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    public void calculateWeights(){        
         // Looping over all users
         for(int i = 0; i < numUsers; i++){
             for(int j = 0; j < numUsers; j++){
@@ -72,11 +99,17 @@ public class NeighborhoodBased {
         }        
     }
     
-    public void calculateWeights(){
+    public void calculateMeans(){
         for (int i = 0; i < numUsers; i++) {
-            for (int j = 0; j < numUsers; j++) {
-                
+            double sum = 0;
+            int counter = 0;
+            for (int j = 0; j < numItems; j++) {
+                sum += r.get(i, j);
+                if (r.get(i,j) > 0){
+                    counter++;
+                }
             }
+            userMeans.set(i,1, sum/counter);
         } 
     }
     
