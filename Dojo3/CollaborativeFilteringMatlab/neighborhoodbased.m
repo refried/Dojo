@@ -34,40 +34,43 @@ function [P] = neighborhoodbased(R)
         %w(i, i) = 0;
     end
 
-    
-    % THIS CODE WORKS AND IS GOOD...ITS JUST SLOW
-    
-    %     P = zeros(numUser, numItem);
-%     for i = 1:numUser
-%         for j = 1:numItem
-%             nz = ~any(R(:, j) == 0, 2);
-%             denom = sum(abs(w(i, nz)));
-%             delta = 0;
-%             if denom ~= 0
-%                 delta = (w(i, nz) * diff(nz, j)) / denom;
-%             end
-%             P(i, j) = means(i) + delta;
-%         end
-%     end
-
     function [a] = minus_if_non_zero(Ri, x)
         nz = ~any(Ri == 0, 2);
         a = Ri;
         a(nz, :) = a(nz, :) - x(nz, :);
 
     end
+
     % P_ai = abar + (sum u in U: (r_ui - r_ubar) * w_au)/sum u in U: |w_au|
     diff = bsxfun(@minus_if_non_zero, R, means);
-    wdiff = (diff' * w)';
 
-    % TODO: This isnt right...this should not include cases filtered out
-    % because the data was not in the original matrix.  See above
-    denom = sum(abs(w));
-    %delta = wdiff ./ repmat(denom, size(wdiff, 1), 1);
-    delta = bsxfun(@rdivide, wdiff, denom');
+    P = zeros(numUser, numItem);
+    for j = 1:numItem
+        nz = ~any(R(:, j) == 0, 2);
+        denom = sum(abs(w(:, nz)), 2);
+        delta = 0;
+        if denom ~= 0
+            delta = (w(:, nz) * diff(nz, j)) ./ denom;
+        end
+        P(:, j) = means + delta;
+    end
     
-    A = repmat(means, 1, numItem);
-    P = A + delta;
+
+    
+    %     wdiff = (diff' * w)';
+% 
+%     % TODO: This isnt right...this should not include cases filtered out
+%     % because the data was not in the original matrix.  See above
+%     denom = sum(abs(w));
+%     %delta = wdiff ./ repmat(denom, size(wdiff, 1), 1);
+%     delta = bsxfun(@rdivide, wdiff, denom');
+%     
+%     A = repmat(means, 1, numItem);
+%     P = A + delta;
+%   
+
+%     end
+
     
     %      for i = 1:numUser
 %          Dt = Rt(~any(Rt(:, i) == 0, 2), :);
