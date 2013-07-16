@@ -1,3 +1,11 @@
+%
+% neighborhoodbased.m - Neighborhood based collaborative filtering.
+%
+% Given a (users x items) matrix of user ratings, compute a matrix that
+% gives a predicted rating for every user and item.  This is implemented
+% using neighborhood based filtering, which is based on the pearson
+% coefficient of correlation.
+%
 function [P] = neighborhoodbased(R)
 
     numUser = size(R, 1)
@@ -8,6 +16,8 @@ function [P] = neighborhoodbased(R)
     Rt = R';
 
     % Compute the user -> user weights, and the user means
+    % w(u,v) = (sum u in U, v in V: (Rui - Rubar(v))(Rvi - Rvbar(u))) /
+    %          (sqrt((Rui - Rubar(v))^2) * sqrt((Rvi - Rvbar(u))^2)
     for i = 1:numUser
         Dt = Rt(~any(Rt(:, i) == 0, 2), :);
         means(i) = mean(Dt(:, i));
@@ -34,6 +44,9 @@ function [P] = neighborhoodbased(R)
         %w(i, i) = 0;
     end
 
+    % Compute the prediction matrix p for every user and every item
+    
+    % Only subtract non-zero elements, to avoid (0 - u) situations.
     function [a] = minus_if_non_zero(Ri, x)
         nz = ~any(Ri == 0, 2);
         a = Ri;
@@ -54,73 +67,4 @@ function [P] = neighborhoodbased(R)
         end
         P(:, j) = means + delta;
     end
-    
-
-    
-    %     wdiff = (diff' * w)';
-% 
-%     % TODO: This isnt right...this should not include cases filtered out
-%     % because the data was not in the original matrix.  See above
-%     denom = sum(abs(w));
-%     %delta = wdiff ./ repmat(denom, size(wdiff, 1), 1);
-%     delta = bsxfun(@rdivide, wdiff, denom');
-%     
-%     A = repmat(means, 1, numItem);
-%     P = A + delta;
-%   
-
-%     end
-
-    
-    %      for i = 1:numUser
-%          Dt = Rt(~any(Rt(:, i) == 0, 2), :);
-%         
-%          for j = i:numUser
-%              flt = ~any(Dt(:, j) == 0, 2);
-%              V = [Dt(flt, i) Dt(flt, j)];
-%              sizeV = size(V, 1);
-%              if (sizeV >= 2)
-%                  rbar = sum(V) / sizeV;
-%                  Vdiff = bsxfun(@minus, V, rbar);
-%                  num = sum(prod(Vdiff, 2));
-%                  denom = prod(sqrt(sum(Vdiff .^ 2)));
-%                  if denom ~= 0
-%                      w(i, j) = num / denom;
-%                      w(j, i) = num / denom;
-%                  else
-%                      w(i, j) = 0;
-%                      w(j, i) = 0;
-%                  end
-%              end
-%          end
-%      %   i
-%      end
-     
-     %    
-
-%      
-%           for i = 1:numUser
-%          D = R(:, ~any(R(i, :) == 0, 1));
-%         
-%          for j = i:numUser
-%              flt = ~any(D(j, :) == 0, 1);
-%              V = [D(i, flt) ; D(j, flt)];
-%              sizeV = size(V, 2);
-%              if (sizeV >= 2)
-%                  rbar = sum(V, 2) / sizeV;
-%                  Vdiff = bsxfun(@minus, V, rbar);
-%                  num = sum(prod(Vdiff));
-%                  denom = prod(sqrt(sum(Vdiff .^ 2, 2)));
-%                  if denom ~= 0
-%                      w(i, j) = num / denom;
-%                      w(j, i) = num / denom;
-%                  else
-%                      w(i, j) = 0;
-%                      w(j, i) = 0;
-%                  end
-%              end
-%          end
-%      %   i
-%      end
-%      
 end
