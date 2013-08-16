@@ -13,7 +13,7 @@ Both projects use the same dependencies and are built using the same instruction
 
 This project depends on the OpenCV for Android library, located at (http://sourceforge.net/projects/opencvlibrary/files/opencv-android/).  Make sure you download the library for Android; the "latest version" link will take you to the full OpenCV package, which will not work.
 
-## Building[^1]
+## Building[1]
 
 This guide assumes that you have Eclipse (tested on Indigo SR2) and Android SDK and ADT installed and configured.  OpenCV requires Android SDK 11 (Honeycomb), and BlobifyMe requires Android SDK 17 (Jelly Bean 4.2.2)
 
@@ -47,5 +47,7 @@ The first time this is run, it will check if OpenCV Manager is installed.  If no
 
 The code will work with shades of green, such as the green Android folders from Google.  To change this, modify the mask values in the BlobDetection class to be the colors you want.
 
-[^1]: Build instructions adopted from (http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html)
+***
+
+[1]: "http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html" Build instructions adopted from http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html
 
