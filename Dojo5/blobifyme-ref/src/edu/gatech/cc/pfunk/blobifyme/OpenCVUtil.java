@@ -17,6 +17,7 @@ import android.util.Log;
 public class OpenCVUtil {
     
     private static final String TAG = OpenCVUtil.class.getSimpleName();
+    protected static boolean initd = false;
 
     public static void initOpenCV(Context context) {
         BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(context) {
@@ -24,6 +25,7 @@ public class OpenCVUtil {
             public void onManagerConnected(int status) {
                 switch (status) {
                     case LoaderCallbackInterface.SUCCESS:
+                        initd = true;
                         Log.i(TAG, "OpenCV loaded successfully");
                         break;
                     default:
@@ -36,6 +38,10 @@ public class OpenCVUtil {
         OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, context, mLoaderCallback);
     }
     
+    public static boolean isInitd() {
+        return initd;
+    }
+
     public static void matToFile(Context context, Mat src, Uri outUri) throws FileNotFoundException {
         Bitmap dest = Bitmap.createBitmap(src.width(), src.height(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(src, dest);
@@ -43,4 +49,5 @@ public class OpenCVUtil {
         OutputStream out = context.getContentResolver().openOutputStream(outUri);
         dest.compress(Bitmap.CompressFormat.JPEG, 90, out);
     }
+
 }

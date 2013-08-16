@@ -23,6 +23,10 @@ public class BlobifyMeApp extends Activity {
     private static final String TAG = BlobifyMeApp.class.getSimpleName();
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int CHOOSE_FILE_RESULT_CODE = 200;
+    private static final String FILE_URI  = "FileURI";
+    private static final String BLOB_URI  = "BlobURI";
+    private static final String IMAGE_URI = "ImageURI";
+    
 
     private ImageView pictureView;
     private Button    takePictureBtn;
@@ -36,6 +40,13 @@ public class BlobifyMeApp extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //if there is state to load in, load it in here
+        if (savedInstanceState != null) {
+            this.fileUri = savedInstanceState.getParcelable(FILE_URI);
+            this.blobUri = savedInstanceState.getParcelable(BLOB_URI);
+            this.imageUri = savedInstanceState.getParcelable(IMAGE_URI);
+        }
+
         setContentView(R.layout.activity_blobify_me_app);
         this.pictureView = (ImageView) findViewById(R.id.picture_view);
         this.pictureView.setOnClickListener(new OnClickListener() {
@@ -58,13 +69,29 @@ public class BlobifyMeApp extends Activity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //save out the state, to be loaded when the app reloads
+        outState.putParcelable(FILE_URI,  this.fileUri);
+        outState.putParcelable(BLOB_URI,  this.blobUri);
+        outState.putParcelable(IMAGE_URI, this.imageUri);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        if (!OpenCVUtil.isInitd()) {
+            // init Open CV
+            // NOTE: this is an async operation...we'll be fine for now, but
+            // be aware if you use this in another app.
+            OpenCVUtil.initOpenCV(this);
+        }
         
-        // init Open CV
-        // NOTE: this is an async operation...we'll be fine for now, but
-        // be aware if you use this in another app.
-        OpenCVUtil.initOpenCV(this);
+        // if we have an image to display, display it
+        if (this.imageUri != null) {
+            pictureView.setImageURI(this.imageUri);
+        }
     }
 
     
