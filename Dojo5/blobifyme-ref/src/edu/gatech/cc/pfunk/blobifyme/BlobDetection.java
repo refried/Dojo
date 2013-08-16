@@ -10,6 +10,12 @@ import org.opencv.imgproc.Imgproc;
 
 import android.graphics.Bitmap;
 
+/**
+ * Blob detection code, using Open CV to mask and process the image.
+ * 
+ * @author Jesse Rosalia
+ *
+ */
 public class BlobDetection {
 
     // values discovered to work with green Android folder through trial and error

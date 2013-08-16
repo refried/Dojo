@@ -8,6 +8,12 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+/**
+ * Utilities for dealing with media files from the camera.
+ * 
+ * @author Jesse Rosalia
+ *
+ */
 public class MediaFileUtil {
 
     public static final int MEDIA_TYPE_IMAGE = 1;

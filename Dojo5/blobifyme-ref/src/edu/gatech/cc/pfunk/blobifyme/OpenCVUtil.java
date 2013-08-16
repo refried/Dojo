@@ -14,6 +14,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+/**
+ * Utilities for working with OpenCV.
+ * 
+ * @author Jesse Rosalia
+ *
+ */
 public class OpenCVUtil {
     
     private static final String TAG = OpenCVUtil.class.getSimpleName();
