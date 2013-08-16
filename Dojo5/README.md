@@ -43,8 +43,9 @@ The first time this is run, it will check if OpenCV Manager is installed.  If no
 
 1. Press the *Take Picture* button to launch the camera interface
 2. Take a picture, and click the check mark to accept it
-3. TBD
+3. Tap on the image (in the app) to toggle between the camera image and the masked image.
 
+The code will work with shades of green, such as the green Android folders from Google.  To change this, modify the mask values in the BlobDetection class to be the colors you want.
 
 [^1]: Build instructions adopted from (http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html)
 
