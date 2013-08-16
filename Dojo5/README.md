@@ -49,5 +49,5 @@ The code will work with shades of green, such as the green Android folders from 
 
 ***
 
-[1]: "http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html" Build instructions adopted from http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html
+[1]: Build instructions adopted from (http://docs.opencv.org/doc/tutorials/introduction/android_binary_package/dev_with_OCV_on_Android.html)
 
