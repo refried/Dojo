@@ -21,18 +21,23 @@ import android.widget.ImageView;
 public class BlobifyMeApp extends Activity {
 
     private static final String TAG = BlobifyMeApp.class.getSimpleName();
+    
+    /** Codes used for startActivityForResult/onActivityResult **/
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int CHOOSE_FILE_RESULT_CODE = 200;
+    
+    /** Bundle keys used for saving instance state */
     private static final String FILE_URI  = "FileURI";
     private static final String BLOB_URI  = "BlobURI";
     private static final String IMAGE_URI = "ImageURI";
     
 
+    /** Controls **/
     private ImageView pictureView;
     private Button    takePictureBtn;
 
+    /** Data **/
     private Uri fileUri;
-
     private Uri blobUri;
     private Uri imageUri;
 
@@ -94,7 +99,6 @@ public class BlobifyMeApp extends Activity {
         }
     }
 
-    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -102,7 +106,7 @@ public class BlobifyMeApp extends Activity {
         return true;
     }
 
-    protected void doTakePicture() {
+    private void doTakePicture() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -115,15 +119,19 @@ public class BlobifyMeApp extends Activity {
         
     }
     
-    protected void doLoadPicture() {
+    @SuppressWarnings("unused")
+    private void doLoadPicture() {
         // create Intent to load a picture and return control the calling application
         Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
+
         // set the type of content to include all images
         intent2.setType("image/*");
+        
         // start the get content Intent
         startActivityForResult(intent2, CHOOSE_FILE_RESULT_CODE);
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri uri = null;
@@ -150,8 +158,11 @@ public class BlobifyMeApp extends Activity {
      */
     private void extractBlobIntoFile() {
         try {
+            //load the file into a bitmap
             InputStream is = getContentResolver().openInputStream(this.fileUri);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
+            
+            //extract the color blob
             Mat masked = BlobDetection.extractColorBlob(bitmap);
             
             this.blobUri = MediaFileUtil.getOutputMediaFileUri(MediaFileUtil.MEDIA_TYPE_IMAGE);
