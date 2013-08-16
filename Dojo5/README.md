@@ -1,7 +1,13 @@
 BlobifyMe
 ==========
 
-This project demonstrates the use of OpenCV on Android to perform simple blob detection on a captured image.  It utilizes the built in Android Camera app to capture the picture.
+This Dojo demonstrates the use of OpenCV on Android to perform simple blob detection on a captured image.  It utilizes the built in Android Camera app to capture the picture.
+
+## Projects
+* *blobifyme-ref* - A reference implementation of the application, used to prepare for the dojo and to check our work.
+* *blobifyme-dojo* - The app built during the dojo.
+
+Both projects use the same dependencies and are built using the same instructions.
 
 ## Dependencies
 
